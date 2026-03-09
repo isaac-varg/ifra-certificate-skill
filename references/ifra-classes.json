@@ -1,0 +1,171 @@
+{
+  "amendment": "50th",
+  "classes": [
+    {
+      "class": "1",
+      "label": "Class 1",
+      "products": [
+        "Lip Products of all Types (Solid & Liquid) lipsticks, Balms & Wax (Clear or Colored)",
+        "Toys"
+      ]
+    },
+    {
+      "class": "2",
+      "label": "Class 2",
+      "products": [
+        "Body Sprays & Mists, Men & Women (intended or labeled for use in axillae)",
+        "Deodorant and Antiperspirant Products of all types (spray, stick, roll-on, under-arm & body, etc.)",
+        "Fragranced Bracelets",
+        "Nose Pore Strips"
+      ]
+    },
+    {
+      "class": "3",
+      "label": "Class 3",
+      "products": [
+        "3.A - Hydroalcoholic Products Applied to Recently Shaved Skin (EDT)",
+        "3.B - Hydroalcoholic Products Applied to Recently Shaved Skin (Fine Fragrance)",
+        "3.C - Baby Creams, Lotions, Oils",
+        "3.C - Body Paint for Children",
+        "3.C - Eye Products of all Types (eye shadow, mascara, eyeliner, eye make-up, make-up, etc.) including eye care",
+        "3.C - Men's Facial Creams, Balms",
+        "3.D - Tampons"
+      ]
+    },
+    {
+      "class": "4",
+      "label": "Class 4",
+      "products": [
+        "4.A - Hydroalcoholic Products Applied To Unshaved Skin (EDT)",
+        "4.A - Ingredients of Perfume Kits",
+        "4.A - Scent Pads, Foil Packs",
+        "4.A - Scent Strips for Hydroalcoholic Products",
+        "4.B - Hydroalcoholic Products Applied To Unshaved Skin (Cologne, EDP or Parfum)",
+        "4.C - Body Creams, Oils, Lotions of all types (except baby products)",
+        "4.C - Body Paint for Adults",
+        "4.C - Body Sprays (Not intended for Axillae)",
+        "4.C - Foot Care Products",
+        "4.C - Fragrance Compounds for Cosmetic Kits",
+        "4.C - Hair Deodorant",
+        "4.C - Hair Styling Aids, Hair Sprays of all Types",
+        "4.D - Fragrancing cream & Solid Perfumes"
+      ]
+    },
+    {
+      "class": "5",
+      "label": "Class 5",
+      "products": [
+        "Baby Powder and Talc",
+        "Dry or Waterless Shampoo",
+        "Facial Masks",
+        "Hair Permanent & Chemical Treatments (e.g. relaxers) but not hair dyes",
+        "Hand Cream",
+        "Hand sanitizers",
+        "Wipes or Refreshing Tissues for Face, Neck, Hands, Body",
+        "Women's Facial Creams/Facial Make-up"
+      ]
+    },
+    {
+      "class": "6",
+      "label": "Class 6",
+      "products": [
+        "Mouthwash, Including Breath Sprays",
+        "Toothpaste"
+      ]
+    },
+    {
+      "class": "7",
+      "label": "Class 7",
+      "products": [
+        "7.A - Baby Wipes",
+        "7.A - Intimate (Feminine) Wipes",
+        "7.A - Toilet Wipes",
+        "7.B - Insect Repellent (intended to be applied to the skin)"
+      ]
+    },
+    {
+      "class": "8",
+      "label": "Class 8",
+      "products": [
+        "8.A - Hair Styling Aids Non-Spray of all types (mousse, gels, leave-in conditioners)",
+        "8.A - Make-up Removers of all types (not including face cleansers)",
+        "8.A - Nail Care",
+        "8.A - Powders & Talcs, All Types (Except baby Powders & Talcs)",
+        "8.B - Hair Dyes"
+      ]
+    },
+    {
+      "class": "9",
+      "label": "Class 9",
+      "products": [
+        "9.A - Bath Gels, Foams, Mousses, Salts, Oils & other products added to bathwater",
+        "9.A - Body Washes of all types (including baby washes) & Shower Gels of all Type",
+        "9.A - Conditioner (Rinse-Off)",
+        "9.A - Depilatory, all (including Body Waxes for mechanical hair removal)",
+        "9.A - Face Cleansers of all types (washes, gels, scrubs, etc.)",
+        "9.A - Shampoos of all types (including baby shampoos)",
+        "9.A - Shaving Creams of all types (stick, gels, foams, etc.)",
+        "9.A - Soap Liquid & Bar (Toilet Soap)",
+        "9.B - Feminine Hygiene - Pads & Liners",
+        "9.B - Toilet Paper",
+        "9.B - Wheat Bags",
+        "9.C - Air fresheners sprays (incl. Room Sprays, Aerosols & Pump)",
+        "9.C - Facial Tissues, Napkins & Paper Towels"
+      ]
+    },
+    {
+      "class": "10",
+      "label": "Class 10",
+      "products": [
+        "10.A - Dry Cleaning Kits",
+        "10.A - Fabric Softeners of all types including fabric softener sheets",
+        "10.A - Hand Dishwashing Detergent including concentrates",
+        "10.A - Handwash Laundry Detergents of all types including concentrates",
+        "10.A - Hard Surface Cleaners (Bathroom & Kitchen Cleansers & Furniture polish, etc.)",
+        "10.A - Machine Wash Laundry Detergent & Bleach (liquids, powders, tablets, etc.)",
+        "10.A - Other Household Cleaning Products (fabric, soft surface & Carpet Cleaners)",
+        "10.A - Shampoos for pets",
+        "10.B - Diapers",
+        "10.B - Scented Gloves or Socks",
+        "10.B - Toilet seat wipes"
+      ]
+    },
+    {
+      "class": "11",
+      "label": "Class 11",
+      "products": [
+        "Air Delivery Systems (Automated or with Manual Activator) with no contact with dispensing port",
+        "Air Fresheners (Solids, Liquid or Closed systems). Excluding Manual Deliver Room Spray Products",
+        "All Non-Skin, or incidental skin, Contact",
+        "Animal sprays & Cat Litter",
+        "Candles",
+        "Concentrated Aerosol Air Fresheners for metered systems",
+        "Deodorizers/Maskers not intended for skin contact",
+        "Floor Wax",
+        "Fuels & Paints",
+        "Insecticides (mosquito coil, paper, electrical, for clothing) excluding aerosols",
+        "Joss Sticks, Incense, Crystals/Stones, Blotters, Sachets & Fragrance Lamp Ring",
+        "Liquid Air Freshener Refills (Cartridge & Non-Cartridge Systems)",
+        "Machine Dishwash detergent and deodorizers",
+        "Machine only Laundry Detergent (e.g. liquitabs)",
+        "Odored Distilled Water (that can be added to steam irons)",
+        "Plastic Articles (excluding toys)",
+        "Reed Diffusers & Liquid Refills (Cartridge & Non-Cartridge Systems)",
+        "Scent delivery systems using dry air technology",
+        "Scent Pack",
+        "Scratch and Sniff",
+        "Shoe Polishes",
+        "Toilet Blocks",
+        "Treated Textiles (starch sprays, fabric treated with fragrance after wash, etc.)"
+      ]
+    },
+    {
+      "class": "12",
+      "label": "Class 12",
+      "products": [
+        "Products with intended skin contact but where migration to skin is not expected (e.g. wet wipes for surfaces)",
+        "Products not intended to have contact with skin (e.g. sachets with no skin contact)"
+      ]
+    }
+  ]
+}
