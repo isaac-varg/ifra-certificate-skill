@@ -186,19 +186,50 @@ def make_styles():
     }
 
 
+# ── Ordered category keys for 51st Amendment ─────────────────────────────────
+CATEGORY_ORDER = [
+    "1", "2", "3", "4", "5A", "5B", "5C", "5D",
+    "6", "7A", "7B", "8", "9", "10A", "10B", "11A", "11B", "12",
+]
+
+
+def _normalize_category_key(raw: str) -> str | None:
+    """Normalize a parsed category/class identifier to a standard key.
+
+    Handles formats like: '5A', '5.A', '5 A', '5.a', '10A', '10.A',
+    '11B', '11.B', as well as plain numbers '1' through '12'.
+    Returns None if the key isn't a recognised IFRA category.
+    """
+    s = raw.strip().upper().replace(".", "").replace(" ", "")
+    if s in CATEGORY_ORDER:
+        return s
+    if s.isdigit() and s in CATEGORY_ORDER:
+        return s
+    return None
+
+
 # ── PDF parsing ───────────────────────────────────────────────────────────────
 def extract_usage_levels(pdf_path: str) -> dict[str, float]:
-    """Parse a supplier IFRA PDF and return {class_num: max_usage_%}."""
+    """Parse a supplier IFRA PDF and return {category_key: max_usage_%}.
+
+    Supports both 50th-Amendment 'Class N' and 51st-Amendment 'Category N'
+    formats, including subcategory letters (e.g. 5A, 5.A, 10A, 11B).
+    """
     levels = {}
-    pattern = re.compile(r"[Cc]lass\s+(\d+(?:\.\w+)?)\s+([\d.]+)")
+    # Match "Class 5A  12.345" or "Category 10.B  0.500" etc.
+    pattern = re.compile(
+        r"[Cc](?:lass|ategory)\s+(\d+(?:[.\s]?[A-Da-d])?)\s+([\d.]+)"
+    )
     with pdfplumber.open(pdf_path) as pdf:
         for page in pdf.pages:
             text = page.extract_text() or ""
             for m in pattern.finditer(text):
-                cls = m.group(1).strip()
+                key = _normalize_category_key(m.group(1))
+                if key is None:
+                    continue
                 val = float(m.group(2).strip())
-                if cls not in levels:
-                    levels[cls] = val
+                if key not in levels:
+                    levels[key] = val
             # Also try table extraction
             tables = page.extract_tables()
             for table in tables:
@@ -206,14 +237,17 @@ def extract_usage_levels(pdf_path: str) -> dict[str, float]:
                     if not row or len(row) < 2:
                         continue
                     cell0 = str(row[0] or "").strip()
-                    cell1 = str(row[1] or "").strip()
-                    m2 = re.search(r"(\d+(?:\.\w+)?)$", cell0)
+                    cell1 = str(row[-1] or "").strip()  # value may be in last column
+                    # Try to find a category identifier at the end of the cell
+                    m2 = re.search(r"(\d+(?:[.\s]?[A-Da-d])?)$", cell0)
                     if m2:
+                        key = _normalize_category_key(m2.group(1))
+                        if key is None:
+                            continue
                         try:
-                            val = float(cell1.replace(",", "."))
-                            cls = m2.group(1)
-                            if cls not in levels:
-                                levels[cls] = val
+                            val = float(cell1.replace(",", ".").replace("%", "").strip())
+                            if key not in levels:
+                                levels[key] = val
                         except ValueError:
                             pass
     return levels
@@ -224,8 +258,8 @@ def blend_usage_levels(ingredients: list[tuple[str, str, float]]) -> dict[str, f
     Compute blended IFRA limits for a finished fragrance blend.
     ingredients: list of (name, pdf_path, pct_in_blend)
     
-    Formula: blended_limit[class] = min over each ingredient of:
-        supplier_limit[class] / (ingredient_pct / 100)
+    Formula: blended_limit[category] = min over each ingredient of:
+        supplier_limit[category] / (ingredient_pct / 100)
     This gives the max % of finished blend that can be used in a product.
     """
     all_limits = []
@@ -256,7 +290,8 @@ def blend_usage_levels(ingredients: list[tuple[str, str, float]]) -> dict[str, f
 def load_classes() -> list[dict]:
     with open(CLASSES_PATH) as f:
         data = json.load(f)
-    return data["classes"]
+    # Support both old key ("classes") and new key ("categories")
+    return data.get("categories", data.get("classes", []))
 
 
 def build_header(styles) -> list:
@@ -336,26 +371,17 @@ def build_page1(styles, product_name, sku, usage_levels, is_blend=False, blend_i
     story.append(Paragraph(cert_text, styles["body"]))
     story.append(Spacer(1, 0.1 * inch))
 
-    # Usage table — 11 standard IFRA classes shown on page 1
-    ordered_classes = [str(i) for i in range(1, 12)]
+    # Usage table — all 18 IFRA categories (51st Amendment)
     table_data = [
-        [Paragraph("Class", styles["table_header"]),
+        [Paragraph("Category", styles["table_header"]),
          Paragraph("Maximum Usage Level %", styles["table_header_right"])]
     ]
-    for cls in ordered_classes:
-        val = usage_levels.get(cls, 0.0)
-        row_style = TABLE_ROW_ALT if int(cls) % 2 == 0 else colors.white
+    for idx, cat in enumerate(CATEGORY_ORDER):
+        val = usage_levels.get(cat, 0.0)
         table_data.append([
-            Paragraph(f"Class {cls}", styles["table_cell"]),
+            Paragraph(f"Category {cat}", styles["table_cell"]),
             Paragraph(f"{val:.3f}", styles["table_cell_center"]),
         ])
-
-    # Class 12 row
-    val12 = usage_levels.get("12", 0.0)
-    table_data.append([
-        Paragraph("Class 12", styles["table_cell"]),
-        Paragraph(f"{val12:.3f}", styles["table_cell_center"]),
-    ])
 
     col_widths = [2.5 * inch, 2.5 * inch]
     usage_table = Table(table_data, colWidths=col_widths)
@@ -365,8 +391,8 @@ def build_page1(styles, product_name, sku, usage_levels, is_blend=False, blend_i
         ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, TABLE_ROW_ALT]),
         ("LEFTPADDING", (0, 0), (-1, -1), 8),
         ("RIGHTPADDING", (0, 0), (-1, -1), 8),
-        ("TOPPADDING", (0, 0), (-1, -1), 5),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+        ("TOPPADDING", (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
         ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
     ]
     usage_table.setStyle(TableStyle(row_styles))
@@ -399,32 +425,35 @@ def build_page1(styles, product_name, sku, usage_levels, is_blend=False, blend_i
 
 
 def build_class_def_pages(styles, classes_data) -> list:
-    """Pages 2–3: IFRA class definitions table."""
+    """Pages 2+: IFRA category definitions table."""
     story = []
     story.append(PageBreak())
-    story.append(Paragraph("IFRA Class Definitions", styles["title"]))
+    story.append(Paragraph("IFRA Category Definitions", styles["title"]))
     story.append(HRFlowable(width="100%", thickness=1, color=DIVIDER, spaceAfter=10, spaceBefore=4))
 
     table_data = [
-        [Paragraph("Class", styles["table_header"]),
+        [Paragraph("Category", styles["table_header"]),
          Paragraph("Finished Product Type", styles["table_header"])]
     ]
     for cls_info in classes_data:
         products_text = "\n".join(f"• {p}" for p in cls_info["products"])
+        # Use the "category" key if present, fall back to "class" for backwards compat
+        cat_key = cls_info.get("category", cls_info.get("class", ""))
+        cat_label = cls_info.get("label", f"Category {cat_key}")
         table_data.append([
-            Paragraph(cls_info["label"], styles["table_cell"]),
+            Paragraph(cat_label, styles["table_cell"]),
             Paragraph(products_text, styles["class_def_cell"]),
         ])
 
-    def_table = Table(table_data, colWidths=[1.0 * inch, 6.0 * inch], repeatRows=1)
+    def_table = Table(table_data, colWidths=[1.1 * inch, 5.9 * inch], repeatRows=1)
     def_table.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, 0), TABLE_HEADER_BG),
         ("GRID", (0, 0), (-1, -1), 0.5, TABLE_BORDER),
         ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, TABLE_ROW_ALT]),
         ("LEFTPADDING", (0, 0), (-1, -1), 8),
         ("RIGHTPADDING", (0, 0), (-1, -1), 8),
-        ("TOPPADDING", (0, 0), (-1, -1), 5),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+        ("TOPPADDING", (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
     ]))
     story.append(def_table)
