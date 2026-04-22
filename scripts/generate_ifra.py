@@ -50,7 +50,7 @@ COMPANY_NAME = _config["company_name"]
 COMPANY_PHONE = _config["phone"]
 COMPANY_EMAIL = _config["email"]
 LOGO_PATH = PROJECT_DIR / _config.get("logo", "assets/logo.png")
-AMENDMENT = _config.get("amendment", "50th")
+AMENDMENT = _config.get("amendment", "51st")
 
 # ── Brand colours ─────────────────────────────────────────────────────────────
 DARK = colors.HexColor("#1a1a1a")

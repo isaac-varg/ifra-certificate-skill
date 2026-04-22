@@ -9,7 +9,7 @@ A AI Agent skill that generates a branded IFRA Certificates of Conformity as a P
 - **Multi-Oil Blend**
   - combine multiple components into one finished certificate with blended usage limits
 - Branded header with company logo, name, phone, and email
-- Full IFRA 50th Amendment class definitions (Classes 1–12)
+- Full IFRA 51th Amendment category definitions
 - Disclaimer page
 - Per-page footer
 
@@ -42,7 +42,7 @@ mv config.example.json config.json
   "phone": "(555) 123-4567",
   "email": "hello@yourcompany.com",
   "logo": "assets/logo.png",
-  "amendment": "50th"
+  "amendment": "51th"
 }
 ```
 
